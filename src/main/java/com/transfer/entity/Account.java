@@ -13,6 +13,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -24,7 +26,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long account_Id;
 
     @Column(nullable = false, unique = true)
     private String accountNumber;
@@ -57,10 +59,18 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
 
+    @OneToMany(mappedBy = "sourceAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<Transaction> inTransactions = new HashSet<>();
+
+    @OneToMany(mappedBy = "destinationAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<Transaction> outTransactions = new HashSet<>();
+
 
     public AccountDTO toDTO() {
         return AccountDTO.builder()
-                .id(this.id)
+                .id(this.account_Id)
                 .accountNumber(this.accountNumber)
                 .accountType(this.accountType)
                 .balance(this.balance)

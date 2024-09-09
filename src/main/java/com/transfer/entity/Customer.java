@@ -23,7 +23,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long customer_Id;
 
     @Column(nullable = false)
     private String name;
@@ -44,9 +44,15 @@ public class Customer {
     @Builder.Default
     private Set<Account> accounts = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Customer_Favourites_Mapping", joinColumns = @JoinColumn(name = "customer_Id"),
+            inverseJoinColumns = @JoinColumn(name = "favourite_Id"))
+    private Set<Favourite> favourites = new HashSet<>();
+
+
     public RegisterCustomerResponse toResponse() {
         return RegisterCustomerResponse.builder()
-                .id(this.id)
+                .id(this.customer_Id)
                 .name(this.name)
                 .email(this.email)
                 .createdAt(this.createdAt)
@@ -56,7 +62,7 @@ public class Customer {
 
     public CustomerDTO toDTO() {
         return CustomerDTO.builder()
-                .id(this.id)
+                .id(this.customer_Id)
                 .name(this.name)
                 .email(this.email)
                 .createdAt(this.createdAt)
