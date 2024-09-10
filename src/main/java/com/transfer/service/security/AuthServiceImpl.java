@@ -14,6 +14,7 @@ import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.security.SecureRandom;
 
@@ -34,6 +36,8 @@ public class AuthServiceImpl implements IAuthService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtUtils jwtUtils;
+
+    private final TokenStore tokenStore;
 
 
     @Transactional
@@ -50,7 +54,7 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
 
         Account account = Account.builder()
-                .balance(0.0)
+                .balance(300000.0)
                 .accountType(AccountType.SAVINGS)
                 .accountDescription("Savings Account")
                 .accountName("Savings Account")
@@ -85,8 +89,13 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
     }
 
-    @Override
-    public void logout(String token) throws ResourceNotFoundException {
-        
-    }
+//    @Override
+//    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+//        if (token != null && token.startsWith("Bearer ")) {
+//            token = token.substring(7);
+//            tokenStore.invalidateToken(token);
+//            return ResponseEntity.ok("Logged out successfully");
+//        }
+//        return ResponseEntity.badRequest().body("Invalid token");
+//    }
 }

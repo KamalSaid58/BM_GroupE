@@ -3,12 +3,14 @@ package com.transfer.dto;
 
 import com.transfer.dto.enums.AccountCurrency;
 import com.transfer.dto.enums.AccountType;
+import com.transfer.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor

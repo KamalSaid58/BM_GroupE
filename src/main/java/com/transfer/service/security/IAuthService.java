@@ -5,6 +5,8 @@ import com.transfer.dto.RegisterCustomerRequest;
 import com.transfer.dto.RegisterCustomerResponse;
 import com.transfer.exception.custom.CustomerAlreadyExistException;
 import com.transfer.exception.custom.ResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface IAuthService {
 
@@ -25,5 +27,5 @@ public interface IAuthService {
      */
     LoginResponseDTO login(LoginRequestDTO loginRequestDTO);
 
-    void logout(String token) throws ResourceNotFoundException;
+//    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token);
 }

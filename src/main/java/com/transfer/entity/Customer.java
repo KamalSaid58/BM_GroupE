@@ -44,9 +44,7 @@ public class Customer {
     @Builder.Default
     private Set<Account> accounts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Customer_Favourites_Mapping", joinColumns = @JoinColumn(name = "customer_Id"),
-            inverseJoinColumns = @JoinColumn(name = "favourite_Id"))
+    @OneToMany(mappedBy = "fav_to_customer",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Favourite> favourites = new HashSet<>();
 
 

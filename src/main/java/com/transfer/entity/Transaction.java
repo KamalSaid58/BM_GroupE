@@ -35,13 +35,11 @@ public class Transaction {
     private Account destinationAccount;
 
 
-    public TransactionDTO toDTO() {
+   public TransactionDTO toDTO(){
         return TransactionDTO.builder()
-                .transactionId(this.transaction_Id)
-                .amount(this.amount)
-                .createdAt(this.createdAt)
-                .sourceAccount(this.sourceAccount)
-                .destinationAccount(this.destinationAccount)
+                .sourceAccountId(sourceAccount.getAccount_Id())
+                .destinationAccountId(destinationAccount.getAccount_Id())
+                .amount(amount)
                 .build();
     }
 

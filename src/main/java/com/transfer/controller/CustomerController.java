@@ -1,7 +1,10 @@
 package com.transfer.controller;
 
 
+import com.transfer.dto.AddFavDTO;
 import com.transfer.dto.CustomerDTO;
+import com.transfer.dto.GetFavDTO;
+import com.transfer.entity.Favourite;
 import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.exception.response.ErrorDetails;
 import com.transfer.service.ICustomerService;
@@ -12,13 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Customer Controller", description = "Customer controller")
@@ -33,4 +35,36 @@ public class CustomerController {
     public CustomerDTO getCustomerById(@PathVariable Long customerId) throws ResourceNotFoundException {
         return this.customerService.getCustomerById(customerId);
     }
+
+    @Operation(summary = "Add favourite to customer")
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = void.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+    @PostMapping("/favorites")
+    public void addFavourite(@RequestBody AddFavDTO addFavDTO) throws ResourceNotFoundException {
+         this.customerService.addFavourite(addFavDTO);
+    }
+
+    @Operation(summary = "Get favourites to customer")
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Set.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+    @GetMapping("/favorites")
+    public Set<Favourite> getFavourites(@RequestBody GetFavDTO getFavDTO) throws ResourceNotFoundException {
+        return this.customerService.getFavourites(getFavDTO);
+    }
+
+    @Operation(summary = "Delete favourite to customer")
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Set.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+    @DeleteMapping("/favorites/{id}")
+    public void deleteFavourite(@PathVariable Long id) throws ResourceNotFoundException {
+         this.customerService.deleteFavourite(id);
+    }
+
+
+
+
+
+
+
+
 }

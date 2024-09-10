@@ -3,6 +3,7 @@ package com.transfer.config;
 import com.transfer.service.security.AuthEntryPointJwt;
 import com.transfer.service.security.AuthTokenFilter;
 import com.transfer.service.security.CustomerDetailsServiceImpl;
+import com.transfer.service.security.TokenStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,8 @@ public class WebSecurityConfig {
 
     private final AuthEntryPointJwt unauthorizedHandler;
 
+    private final TokenStore tokenStore;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -45,7 +48,8 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+        AuthTokenFilter filter = new AuthTokenFilter();
+        return filter;
     }
 
     @Bean

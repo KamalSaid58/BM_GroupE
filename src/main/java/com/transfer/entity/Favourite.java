@@ -31,25 +31,14 @@ public class Favourite {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
-    @ManyToMany(mappedBy = "favourites",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Customer> fav_to_customer=new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Customer fav_to_customer;
 
     public FavouriteDTO toDTO() {
         return FavouriteDTO.builder()
                 .favourite_Id(this.favourite_Id)
                 .name(this.name)
                 .email(this.email)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
                 .build();
     }
 

@@ -1,9 +1,11 @@
 package com.transfer.service;
 
-import com.transfer.dto.AccountDTO;
-import com.transfer.dto.CreateAccountDTO;
-import com.transfer.dto.UpdateAccountDTO;
+import com.transfer.dto.*;
+import com.transfer.entity.Transaction;
 import com.transfer.exception.custom.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Set;
 
 public interface IAccountService {
 
@@ -25,11 +27,10 @@ public interface IAccountService {
      */
     AccountDTO getAccountById(Long accountId) throws ResourceNotFoundException;
 
-    AccountDTO updateAccount(Long accountId, UpdateAccountDTO accountDTO);
+    Double getBalanceByAccountNumber(GetBalanceDTO getBalanceDTO) throws ResourceNotFoundException;
 
-    void deleteAccount(Long accountId);
+    Set<Transaction> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException ;
 
-    void deposit(Long accountId, Double amount);
-
+    Set<Transaction> getOutTransactionsById(Long accountId) throws ResourceNotFoundException;
 
 }

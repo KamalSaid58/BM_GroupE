@@ -1,7 +1,7 @@
 package com.transfer.controller;
 
-import com.transfer.dto.AccountDTO;
-import com.transfer.dto.CreateAccountDTO;
+import com.transfer.dto.*;
+import com.transfer.entity.Transaction;
 import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.exception.response.ErrorDetails;
 import com.transfer.service.IAccountService;
@@ -15,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
-@RequestMapping("/api/v1/account")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Account Controller", description = "Account controller")
@@ -27,7 +29,7 @@ public class AccountController {
     @Operation(summary = "Create new Account")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = AccountDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    @PostMapping
+    @PostMapping("createAccount")
     public AccountDTO createAccount(@Valid @RequestBody CreateAccountDTO accountDTO) throws ResourceNotFoundException {
         return this.accountService.createAccount(accountDTO);
     }
@@ -35,8 +37,30 @@ public class AccountController {
     @Operation(summary = "Get Account by Id")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = AccountDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    @GetMapping("/{accountId}")
+    @GetMapping("/getAccount/{accountId}")
     public AccountDTO getAccountById(@PathVariable Long accountId) throws ResourceNotFoundException {
         return this.accountService.getAccountById(accountId);
     }
+
+    @Operation(summary = "Get Balance by Account Id")
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Double.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+    @GetMapping("/balance")
+    public Double getBalanceByAccountNumber(@RequestBody GetBalanceDTO getBalanceDTO) throws ResourceNotFoundException {
+        return this.accountService.getBalanceByAccountNumber(getBalanceDTO);
+    }
+
+    @Operation(summary = "Get transaction history by account number")
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Set.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+    @GetMapping("/transactions")
+    public Set<Transaction> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException {
+        return this.accountService.getTransactionsByAccountNumber(getTransactionDTO);
+    }
+
+
+
+
+
+
 }

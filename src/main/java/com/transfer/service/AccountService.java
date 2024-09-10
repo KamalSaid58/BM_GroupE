@@ -3,17 +3,23 @@ package com.transfer.service;
 
 import com.transfer.dto.AccountDTO;
 import com.transfer.dto.CreateAccountDTO;
-import com.transfer.dto.UpdateAccountDTO;
+import com.transfer.dto.GetBalanceDTO;
+import com.transfer.dto.GetTransactionDTO;
 import com.transfer.entity.Account;
 import com.transfer.entity.Customer;
+import com.transfer.entity.Transaction;
 import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.repository.AccountRepository;
 import com.transfer.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.SecureRandom;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -52,17 +58,32 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public AccountDTO updateAccount(Long accountId, UpdateAccountDTO accountDTO) {
-        return null;
+    public Double getBalanceByAccountNumber(GetBalanceDTO getBalanceDTO) throws ResourceNotFoundException {
+        String accountNumber = getBalanceDTO.getAccountNumber();
+
+        Account account = (Account) this.accountRepository.findByAccountNumber(accountNumber).orElseThrow(()
+                -> new ResourceNotFoundException("Account not found"));
+        return account.getBalance();
     }
 
     @Override
-    public void deleteAccount(Long accountId) {
+    public Set<Transaction> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException {
+        String accountNumber = getTransactionDTO.getAccountNumber();
+        Account account = this.accountRepository.findByAccountNumber(accountNumber).orElseThrow(()
+                -> new ResourceNotFoundException("Account not found"));
+
+        Set<Transaction> inTransactions = account.getInTransactions();
+
+        Set<Transaction> outTransactions = account.getOutTransactions();
+
+       return Stream.concat(inTransactions.stream(), outTransactions.stream())
+                .collect(Collectors.toSet());
 
     }
 
-    @Override
-    public void deposit(Long accountId, Double amount) {
-
+    public Set<Transaction> getOutTransactionsById(Long accountId) throws ResourceNotFoundException {
+        Account account = this.accountRepository.findById(accountId).orElseThrow(()
+                -> new ResourceNotFoundException("Account not found"));
+        return account.getOutTransactions();
     }
 }

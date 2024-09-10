@@ -15,15 +15,12 @@ import java.time.LocalDateTime;
 @Builder
 public class TransactionDTO {
 
-    private Long transactionId;
+    private Long sourceAccountId;
+
+    private long destinationAccountId;
 
     private double amount;
 
-    private LocalDateTime createdAt;
-
-    private Account sourceAccount;
-
-    private Account destinationAccount;
 
 
 
