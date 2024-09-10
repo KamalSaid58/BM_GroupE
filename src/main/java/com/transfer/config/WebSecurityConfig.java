@@ -3,7 +3,7 @@ package com.transfer.config;
 import com.transfer.service.security.AuthEntryPointJwt;
 import com.transfer.service.security.AuthTokenFilter;
 import com.transfer.service.security.CustomerDetailsServiceImpl;
-import com.transfer.service.security.TokenStore;
+import com.transfer.service.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+
     private final CustomerDetailsServiceImpl userDetailsService;
-
     private final AuthEntryPointJwt unauthorizedHandler;
-
-    private final TokenStore tokenStore;
+    private final JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,10 +35,10 @@ public class WebSecurityConfig {
                                 "/h2-console/**",
                                 "/actuator/**",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                        .requestMatchers("/api/register","/api/login","/api/v1/auth/logout").permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
-
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -48,8 +46,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        AuthTokenFilter filter = new AuthTokenFilter();
-        return filter;
+        return new AuthTokenFilter(jwtUtils);
     }
 
     @Bean
@@ -59,6 +56,7 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

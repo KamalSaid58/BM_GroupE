@@ -19,12 +19,15 @@ import java.io.IOException;
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
     @Autowired
     private CustomerDetailsServiceImpl customerDetailsService;
+
+    private final JwtUtils jwtUtils;
+
+    @Autowired
+    public AuthTokenFilter(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
 
 
     @Override
