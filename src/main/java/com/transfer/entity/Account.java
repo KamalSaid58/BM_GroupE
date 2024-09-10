@@ -1,6 +1,7 @@
 package com.transfer.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.transfer.dto.AccountDTO;
 import com.transfer.dto.enums.AccountCurrency;
 import com.transfer.dto.enums.AccountType;
@@ -33,18 +34,19 @@ public class Account {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private AccountType accountType;
 
     @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Double balance;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private AccountCurrency currency;
 
     private String accountName;
-
-    private String accountDescription;
 
     @Builder.Default
     @Column(nullable = false)
@@ -76,7 +78,6 @@ public class Account {
                 .balance(this.balance)
                 .currency(this.currency)
                 .accountName(this.accountName)
-                .accountDescription(this.accountDescription)
                 .active(this.active)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)

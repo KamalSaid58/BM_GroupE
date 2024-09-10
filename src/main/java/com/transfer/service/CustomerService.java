@@ -2,6 +2,7 @@ package com.transfer.service;
 
 import com.transfer.dto.AddFavDTO;
 import com.transfer.dto.CustomerDTO;
+import com.transfer.dto.FavouriteDTOResponse;
 import com.transfer.dto.GetFavDTO;
 import com.transfer.entity.Customer;
 import com.transfer.entity.Favourite;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,46 +31,57 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public void addFavourite(AddFavDTO addFavDTO) throws ResourceNotFoundException {
-        Long customerId = addFavDTO.getCustomerId();
+    public FavouriteDTOResponse addFavourite(AddFavDTO addFavDTO) throws ResourceNotFoundException {
+        String customerEmail = addFavDTO.getCustomerEmail();
 
-        Long favouriteId = addFavDTO.getFavouriteId();
+        String favouriteEmail = addFavDTO.getFavouriteEmail();
 
-        Customer customer= this.customerRepository.findById(customerId)
+        String favouriteName = this.customerRepository.findUserByEmail(favouriteEmail).get().getName();
+
+        Long favouriteId = this.customerRepository.findUserByEmail(favouriteEmail).get().getCustomer_Id();
+
+
+
+        Customer customer= this.customerRepository.findUserByEmail(customerEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-        Favourite favourite = this.favouriteRepository.findById(favouriteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Favourite not found"));
+        Favourite favourite = Favourite.builder()
+                .favouriteId(favouriteId)
+                .favourite_name(favouriteName)
+                .favourite_email(favouriteEmail)
+                .customer(customer)
+                .build();
+
 
         customer.getFavourites().add(favourite);
 
-        favourite.setFav_to_customer(customer);
+        favourite.setCustomer(customer);
 
         this.customerRepository.save(customer);
 
-        this.favouriteRepository.save(favourite);
+        return favourite.toDTO();
 
     }
 
     @Override
-    public Set<Favourite> getFavourites(GetFavDTO getFavDTO) throws ResourceNotFoundException {
+    public Set<FavouriteDTOResponse> getFavourites(GetFavDTO getFavDTO) throws ResourceNotFoundException {
         String email = getFavDTO.getEmail();
-        Customer customer=this.customerRepository.findUserByEmail(email)
+        Customer customer = this.customerRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-        return customer.getFavourites();
+        return customer.getFavourites().stream().map(Favourite::toDTO).collect(Collectors.toSet());
 
     }
 
     @Override
     public void deleteFavourite(Long id) throws ResourceNotFoundException {
 
-        Favourite favourite = this.favouriteRepository.findById(id)
+        Favourite favourite = this.favouriteRepository.findByFavouriteId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Favourite not found"));
 
-        Customer customer = favourite.getFav_to_customer();
+        Customer customer = favourite.getCustomer();
 
-        favourite.setFav_to_customer(null);
+        favourite.setCustomer(null);
 
         customer.getFavourites().remove(favourite);
 

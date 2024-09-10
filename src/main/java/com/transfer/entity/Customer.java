@@ -44,7 +44,7 @@ public class Customer {
     @Builder.Default
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany(mappedBy = "fav_to_customer",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Favourite> favourites = new HashSet<>();
 
 

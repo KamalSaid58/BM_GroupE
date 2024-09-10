@@ -1,10 +1,7 @@
 package com.transfer.service;
 
 
-import com.transfer.dto.AccountDTO;
-import com.transfer.dto.CreateAccountDTO;
-import com.transfer.dto.GetBalanceDTO;
-import com.transfer.dto.GetTransactionDTO;
+import com.transfer.dto.*;
 import com.transfer.entity.Account;
 import com.transfer.entity.Customer;
 import com.transfer.entity.Transaction;
@@ -40,7 +37,6 @@ public class AccountService implements IAccountService {
                 .accountNumber(new SecureRandom().nextInt(1000000000) + "")
                 .accountType(accountDTO.getAccountType())
                 .accountName(accountDTO.getAccountName())
-                .accountDescription(accountDTO.getAccountDescription())
                 .currency(accountDTO.getCurrency())
                 .balance(0.0)
                 .customer(customer)
@@ -67,7 +63,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Set<Transaction> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException {
+    public Set<TransactionDTOResponse> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException {
         String accountNumber = getTransactionDTO.getAccountNumber();
         Account account = this.accountRepository.findByAccountNumber(accountNumber).orElseThrow(()
                 -> new ResourceNotFoundException("Account not found"));
@@ -76,14 +72,11 @@ public class AccountService implements IAccountService {
 
         Set<Transaction> outTransactions = account.getOutTransactions();
 
-       return Stream.concat(inTransactions.stream(), outTransactions.stream())
+        Set<Transaction> allTransactions= Stream.concat(inTransactions.stream(), outTransactions.stream())
                 .collect(Collectors.toSet());
 
+        return allTransactions.stream().map(Transaction::toDTO).collect(Collectors.toSet());
+
     }
 
-    public Set<Transaction> getOutTransactionsById(Long accountId) throws ResourceNotFoundException {
-        Account account = this.accountRepository.findById(accountId).orElseThrow(()
-                -> new ResourceNotFoundException("Account not found"));
-        return account.getOutTransactions();
-    }
 }

@@ -31,6 +31,7 @@ import java.security.SecureRandom;
 public class AuthServiceImpl implements IAuthService {
 
     private final CustomerRepository customerRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
@@ -54,11 +55,10 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
 
         Account account = Account.builder()
-                .balance(300000.0)
-                .accountType(AccountType.SAVINGS)
-                .accountDescription("Savings Account")
-                .accountName("Savings Account")
-                .currency(AccountCurrency.EGP)
+                .balance(customerRequest.getBalance())
+                .accountType(customerRequest.getAccountType())
+                .accountName(customerRequest.getAccountName())
+                .currency(customerRequest.getCurrency())
                 .accountNumber(new SecureRandom().nextInt(1000000000) + "")
                 .customer(customer)
                 .build();
@@ -89,13 +89,13 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
     }
 
-//    @Override
-//    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
-//        if (token != null && token.startsWith("Bearer ")) {
-//            token = token.substring(7);
-//            tokenStore.invalidateToken(token);
-//            return ResponseEntity.ok("Logged out successfully");
-//        }
-//        return ResponseEntity.badRequest().body("Invalid token");
-//    }
+    @Override
+    public ResponseEntity<String> logout(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+            tokenStore.invalidateToken(token);
+            return ResponseEntity.ok("Logged out successfully");
+        }
+        return ResponseEntity.badRequest().body("Invalid token");
+    }
 }

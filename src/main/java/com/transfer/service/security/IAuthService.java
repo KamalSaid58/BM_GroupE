@@ -27,5 +27,5 @@ public interface IAuthService {
      */
     LoginResponseDTO login(LoginRequestDTO loginRequestDTO);
 
-//    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token);
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token);
 }

@@ -1,6 +1,5 @@
 package com.transfer.dto;
 
-import com.transfer.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,13 +12,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransactionDTO {
+public class TransactionDTOResponse {
+    private String sourceAccountNumber;
 
-    private Long sourceAccountId;
-
-    private long destinationAccountId;
+    private String destinationAccountNumber;
 
     private double amount;
+
+    private LocalDateTime transactionDate;
 
 
 

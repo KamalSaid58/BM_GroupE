@@ -5,13 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddFavDTO {
-    String customerEmail;
+public class TransferDTO {
+    private String sourceAccountNumber;
 
-    String favouriteEmail;
+    private String destinationAccountNumber;
+
+    private double amount;
+
+
+
 
 }

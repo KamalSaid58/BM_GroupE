@@ -1,19 +1,13 @@
 package com.transfer.entity;
 
 
-import com.transfer.dto.FavouriteDTO;
+import com.transfer.dto.FavouriteDTOResponse;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -23,25 +17,31 @@ import java.util.Set;
 public class Favourite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long favourite_Id;
+    private Long general_Id;
 
     @Column(nullable = false)
-    private String name;
+    private Long favouriteId;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(nullable = false)
+    private String favourite_email;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Customer fav_to_customer;
+    @Column(nullable = false)
+    private String favourite_name;
 
-    public FavouriteDTO toDTO() {
-        return FavouriteDTO.builder()
-                .favourite_Id(this.favourite_Id)
-                .name(this.name)
-                .email(this.email)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_Id")
+    private Customer customer;
+
+
+
+
+    public FavouriteDTOResponse toDTO() {
+        return FavouriteDTOResponse.builder()
+                .favourite_Id(this.favouriteId)
+                .favourite_name(this.favourite_name)
+                .customer_Id(this.customer.getCustomer_Id())
                 .build();
     }
-
 
 
 

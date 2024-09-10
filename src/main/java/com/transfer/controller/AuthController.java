@@ -30,10 +30,10 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    @Operation(summary = "Register new Customer")
+    @Operation(summary = "Register new Customer and Account for him")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = RegisterCustomerResponse.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    public RegisterCustomerResponse register(@RequestBody @Valid RegisterCustomerRequest customer) throws CustomerAlreadyExistException {
+    public RegisterCustomerResponse register(@RequestBody RegisterCustomerRequest customer) throws CustomerAlreadyExistException {
         return this.authService.register(customer);
     }
 
@@ -46,13 +46,15 @@ public class AuthController {
 
     }
 
-//    @Operation(summary = "Logout")
-//    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = LoginResponseDTO.class), mediaType = "application/json")})
-//    @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
-//        return this.authService.logout(token);
-//    }
+   @Operation(summary = "Logout")
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = ResponseEntity.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+        return authService.logout(token);
 
-
+    }
 }
+
+
+

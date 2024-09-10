@@ -1,7 +1,6 @@
 package com.transfer.controller;
 
 import com.transfer.dto.*;
-import com.transfer.entity.Transaction;
 import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.exception.response.ErrorDetails;
 import com.transfer.service.IAccountService;
@@ -42,7 +41,7 @@ public class AccountController {
         return this.accountService.getAccountById(accountId);
     }
 
-    @Operation(summary = "Get Balance by Account Id")
+    @Operation(summary = "Get Balance by Account Number")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Double.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
     @GetMapping("/balance")
@@ -54,7 +53,7 @@ public class AccountController {
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Set.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
     @GetMapping("/transactions")
-    public Set<Transaction> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException {
+    public Set<TransactionDTOResponse> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException {
         return this.accountService.getTransactionsByAccountNumber(getTransactionDTO);
     }
 

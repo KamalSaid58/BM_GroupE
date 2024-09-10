@@ -12,17 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FavouriteDTO {
+public class FavouriteDTOResponse {
     private Long favourite_Id;
 
-    private String name;
+    private String favourite_name;
 
-    private String email;
+    private Long customer_Id;
 
-    private String password;
 
-    private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+
+
 
 }

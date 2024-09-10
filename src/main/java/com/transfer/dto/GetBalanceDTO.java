@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GetBalanceDTO {
 
-String accountNumber;
+private String accountNumber;
 
-String balance;
+
 }

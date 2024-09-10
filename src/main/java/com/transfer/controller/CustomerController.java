@@ -3,6 +3,7 @@ package com.transfer.controller;
 
 import com.transfer.dto.AddFavDTO;
 import com.transfer.dto.CustomerDTO;
+import com.transfer.dto.FavouriteDTOResponse;
 import com.transfer.dto.GetFavDTO;
 import com.transfer.entity.Favourite;
 import com.transfer.exception.custom.ResourceNotFoundException;
@@ -37,18 +38,18 @@ public class CustomerController {
     }
 
     @Operation(summary = "Add favourite to customer")
-    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = void.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = FavouriteDTOResponse.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
     @PostMapping("/favorites")
-    public void addFavourite(@RequestBody AddFavDTO addFavDTO) throws ResourceNotFoundException {
-         this.customerService.addFavourite(addFavDTO);
+    public FavouriteDTOResponse addFavourite(@RequestBody AddFavDTO addFavDTO) throws ResourceNotFoundException {
+         return this.customerService.addFavourite(addFavDTO);
     }
 
     @Operation(summary = "Get favourites to customer")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Set.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
     @GetMapping("/favorites")
-    public Set<Favourite> getFavourites(@RequestBody GetFavDTO getFavDTO) throws ResourceNotFoundException {
+    public Set<FavouriteDTOResponse> getFavourites(@RequestBody GetFavDTO getFavDTO) throws ResourceNotFoundException {
         return this.customerService.getFavourites(getFavDTO);
     }
 
