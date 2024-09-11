@@ -4,6 +4,7 @@ import com.transfer.dto.*;
 import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.exception.response.ErrorDetails;
 import com.transfer.service.IAccountService;
+import com.transfer.service.security.TokenStore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +26,8 @@ public class AccountController {
 
     private final IAccountService accountService;
 
+    private final TokenStore tokenStore;
+
     @Operation(summary = "Create new Account")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = AccountDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
@@ -45,7 +48,10 @@ public class AccountController {
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Double.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
     @GetMapping("/balance")
-    public Double getBalanceByAccountNumber(@RequestBody GetBalanceDTO getBalanceDTO) throws ResourceNotFoundException {
+    public Double getBalanceByAccountNumber(@RequestBody GetBalanceDTO getBalanceDTO,@RequestHeader("Authorization") String token) throws ResourceNotFoundException {
+        if(tokenStore.isTokenInvalidated(token)){
+            throw new ResourceNotFoundException("Token is invalid");
+        }
         return this.accountService.getBalanceByAccountNumber(getBalanceDTO);
     }
 
