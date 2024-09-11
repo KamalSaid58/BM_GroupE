@@ -46,14 +46,14 @@ public class AuthController {
 
     }
 
-   @Operation(summary = "Logout")
-    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = ResponseEntity.class), mediaType = "application/json")})
-    @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-        return authService.logout(token);
-
-    }
+//   @Operation(summary = "Logout")
+//    @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = ResponseEntity.class), mediaType = "application/json")})
+//    @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+//        return authService.logout(token);
+//
+//    }
 }
 
 
