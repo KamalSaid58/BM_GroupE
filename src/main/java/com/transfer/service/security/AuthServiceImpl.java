@@ -93,8 +93,13 @@ public class AuthServiceImpl implements IAuthService {
     public ResponseEntity<String> logout(String token) {
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
-            tokenStore.invalidateToken(token);
-            return ResponseEntity.ok("Logged out successfully");
+            try {
+                tokenStore.invalidateToken(token);
+                SecurityContextHolder.clearContext(); // Ensure context is cleared
+                return ResponseEntity.ok("Logged out successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token invalidation failed");
+            }
         }
         return ResponseEntity.badRequest().body("Invalid token");
     }

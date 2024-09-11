@@ -16,6 +16,9 @@ public class TokenStore {
         return jwtUtils.getUserNameFromJwtToken(token);
     }
 
+    @Autowired
+    private BlackListToken blackListToken;
+
     public boolean validateJwtToken(String authToken) {
         return jwtUtils.validateJwtToken(authToken);
     }
@@ -29,10 +32,13 @@ public class TokenStore {
     private ConcurrentHashMap<String, Boolean> invalidatedTokens = new ConcurrentHashMap<>();
 
     public void invalidateToken(String token) {
+        blackListToken.blackListToken(token);
         invalidatedTokens.put(token, true);
     }
 
     public boolean isTokenInvalidated(String token) {
+        if(blackListToken.isBlackListed(token))
+            return true;
         return invalidatedTokens.containsKey(token);
     }
 }

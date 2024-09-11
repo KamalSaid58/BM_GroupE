@@ -1,11 +1,13 @@
 package com.transfer.controller;
 
+import com.transfer.entity.Favourite;
 import com.transfer.service.IFavouriteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "Favourite Controller", description = "Favourite controller")
 public class FavouriteController {
-private final IFavouriteService favouriteService;
 
+    private final IFavouriteService favouriteService;
 
 }

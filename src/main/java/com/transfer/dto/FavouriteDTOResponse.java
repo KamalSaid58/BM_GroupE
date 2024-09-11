@@ -18,10 +18,4 @@ public class FavouriteDTOResponse {
     private String favourite_name;
 
     private Long customer_Id;
-
-
-
-
-
-
 }

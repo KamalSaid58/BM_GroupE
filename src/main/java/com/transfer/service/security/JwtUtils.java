@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ public class JwtUtils {
 
     @Value("${app.jwt.expiration.ms}")
     private int jwtExpirationMs;
+
+    @Autowired
+    private BlackListToken blackListToken;
 
     public String generateJwtToken(Authentication authentication) {
         CustomerDetailsImpl userPrincipal = (CustomerDetailsImpl) authentication.getPrincipal();
@@ -43,6 +47,9 @@ public class JwtUtils {
 
     public boolean validateJwtToken(String authToken) {
         try {
+            if(blackListToken.isBlackListed(authToken)) {
+                return false;
+            }
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {

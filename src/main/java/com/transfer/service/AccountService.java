@@ -8,6 +8,7 @@ import com.transfer.entity.Transaction;
 import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.repository.AccountRepository;
 import com.transfer.repository.CustomerRepository;
+import com.transfer.service.security.CustomerDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ public class AccountService implements IAccountService {
     private final AccountRepository accountRepository;
 
     private final CustomerRepository customerRepository;
-
     @Override
     @Transactional
     public AccountDTO createAccount(CreateAccountDTO accountDTO) throws ResourceNotFoundException {
@@ -56,7 +56,6 @@ public class AccountService implements IAccountService {
     @Override
     public Double getBalanceByAccountNumber(GetBalanceDTO getBalanceDTO) throws ResourceNotFoundException {
         String accountNumber = getBalanceDTO.getAccountNumber();
-
         Account account = (Account) this.accountRepository.findByAccountNumber(accountNumber).orElseThrow(()
                 -> new ResourceNotFoundException("Account not found"));
         return account.getBalance();
