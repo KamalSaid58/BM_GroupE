@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface ITransactionService {
 
-     void transferMoney(@RequestBody TransferDTO transferDTO) ;
+     void transferMoney(TransferDTO transferDTO) ;
 
 
 

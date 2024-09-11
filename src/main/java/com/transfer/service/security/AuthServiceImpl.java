@@ -5,12 +5,9 @@ import com.transfer.dto.LoginRequestDTO;
 import com.transfer.dto.LoginResponseDTO;
 import com.transfer.dto.RegisterCustomerRequest;
 import com.transfer.dto.RegisterCustomerResponse;
-import com.transfer.dto.enums.AccountCurrency;
-import com.transfer.dto.enums.AccountType;
 import com.transfer.entity.Account;
 import com.transfer.entity.Customer;
 import com.transfer.exception.custom.CustomerAlreadyExistException;
-import com.transfer.exception.custom.ResourceNotFoundException;
 import com.transfer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
+
 
 import java.security.SecureRandom;
 

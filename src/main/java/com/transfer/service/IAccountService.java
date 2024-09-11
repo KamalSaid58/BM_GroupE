@@ -2,8 +2,6 @@ package com.transfer.service;
 
 import com.transfer.dto.*;
 import com.transfer.exception.custom.ResourceNotFoundException;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.Set;
 
 public interface IAccountService {
@@ -28,7 +26,7 @@ public interface IAccountService {
 
     Double getBalanceByAccountNumber(GetBalanceDTO getBalanceDTO) throws ResourceNotFoundException;
 
-    Set<TransactionDTOResponse> getTransactionsByAccountNumber(@RequestBody GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException ;
+    Set<TransactionDTOResponse> getTransactionsByAccountNumber(GetTransactionDTO getTransactionDTO) throws ResourceNotFoundException ;
 
 
 
