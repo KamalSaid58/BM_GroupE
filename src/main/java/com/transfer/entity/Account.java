@@ -33,30 +33,14 @@ public class Account {
     private String accountNumber;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private AccountType accountType;
-
-    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Double balance;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private AccountCurrency currency;
 
     private String accountName;
 
     @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
@@ -74,13 +58,9 @@ public class Account {
         return AccountDTO.builder()
                 .id(this.account_Id)
                 .accountNumber(this.accountNumber)
-                .accountType(this.accountType)
                 .balance(this.balance)
-                .currency(this.currency)
                 .accountName(this.accountName)
                 .active(this.active)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
                 .build();
     }
 

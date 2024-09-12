@@ -1,5 +1,6 @@
 package com.transfer.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.transfer.dto.enums.AccountCurrency;
 import com.transfer.dto.enums.AccountType;
 import com.transfer.entity.Account;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,14 +30,10 @@ public class RegisterCustomerRequest {
     private String password;
 
     @NotBlank
-    private Double balance;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
 
     @NotBlank
-    private AccountType accountType;
+    private String country;
 
-    @NotBlank
-    private String accountName;
-
-    @NotBlank
-    private AccountCurrency currency;
 }

@@ -87,6 +87,6 @@ public class CustomerService implements ICustomerService {
 
         this.customerRepository.save(customer);
 
-        this.favouriteRepository.save(favourite);
+        this.favouriteRepository.delete(favourite);
     }
 }

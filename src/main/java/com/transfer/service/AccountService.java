@@ -35,9 +35,7 @@ public class AccountService implements IAccountService {
 
         Account account = Account.builder()
                 .accountNumber(new SecureRandom().nextInt(1000000000) + "")
-                .accountType(accountDTO.getAccountType())
                 .accountName(accountDTO.getAccountName())
-                .currency(accountDTO.getCurrency())
                 .balance(0.0)
                 .customer(customer)
                 .build();

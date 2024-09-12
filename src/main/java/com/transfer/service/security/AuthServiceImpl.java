@@ -8,6 +8,7 @@ import com.transfer.dto.RegisterCustomerResponse;
 import com.transfer.entity.Account;
 import com.transfer.entity.Customer;
 import com.transfer.exception.custom.CustomerAlreadyExistException;
+import com.transfer.repository.AccountRepository;
 import com.transfer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,8 @@ public class AuthServiceImpl implements IAuthService {
 
     private final CustomerRepository customerRepository;
 
+    private final AccountRepository accountRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
@@ -49,23 +52,26 @@ public class AuthServiceImpl implements IAuthService {
                 .email(customerRequest.getEmail())
                 .password(this.passwordEncoder.encode(customerRequest.getPassword()))
                 .name(customerRequest.getName())
+                .country(customerRequest.getCountry())
+                .dateOfBirth(customerRequest.getDateOfBirth())
                 .build();
 
         Account account = Account.builder()
-                .balance(customerRequest.getBalance())
-                .accountType(customerRequest.getAccountType())
-                .accountName(customerRequest.getAccountName())
-                .currency(customerRequest.getCurrency())
+                .balance(10000.0)
+                .accountName(customerRequest.getName()+"'s Account")
                 .accountNumber(new SecureRandom().nextInt(1000000000) + "")
                 .customer(customer)
                 .build();
+
 
         customer.getAccounts().add(account);
 
         Customer savedCustomer = customerRepository.save(customer);
 
+        RegisterCustomerResponse response = savedCustomer.toResponse();
 
-        return savedCustomer.toResponse();
+        response.setAccountNumber(account.getAccountNumber());
+        return response;
     }
 
     @Override
@@ -73,6 +79,13 @@ public class AuthServiceImpl implements IAuthService {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
+
+        if(accountRepository.findByAccountNumber(loginRequestDTO.getAccountNumber()).isEmpty()){
+            return LoginResponseDTO.builder()
+                    .message("Account not found")
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

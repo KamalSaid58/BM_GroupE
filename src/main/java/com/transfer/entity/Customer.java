@@ -3,10 +3,12 @@ package com.transfer.entity;
 import com.transfer.dto.CustomerDTO;
 import com.transfer.dto.RegisterCustomerResponse;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,11 +36,11 @@ public class Customer {
     @Column(nullable = false)
     private String password;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDate dateOfBirth;
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    @Column(nullable = false)
+    private String country;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Builder.Default
@@ -53,8 +55,6 @@ public class Customer {
                 .id(this.customer_Id)
                 .name(this.name)
                 .email(this.email)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
                 .build();
     }
 
@@ -63,8 +63,6 @@ public class Customer {
                 .id(this.customer_Id)
                 .name(this.name)
                 .email(this.email)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
                 .accounts(this.accounts.stream().map(Account::toDTO)
                         .collect(Collectors.toSet()))
                 .build();
